@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>凯格行为验证码 - PHP demo</title>
+<link rel="stylesheet" href="./style/demo.css" />
+<!--
+将以下域名替换成你的“应用服务器域名”
+将以下 appid 替换成你的 AppID
+服务器域名和appid在你的应用管理中获取
+示例：<script src="https://cdn6.kgcaptcha.com/captcha.js?appid=XXX"></script>
+-->
+<script src="https://cdn9.kgcaptcha.com/captcha.js?appid=4gXIWZzz"></script>
+<script>
+kg.captcha({
+    // 绑定弹窗按钮
+    button: "#captchaButton2",
+
+    // 验证成功事务处理
+    success: function (e) {
+        console.log(e);
+        // 将验证成功后的 token 通过隐藏域传递到后端
+        kg.$("#kgCaptchaToken").value = e["token"];
+
+        // 图形验证通过，直接提交表单
+        form1.submit();
+
+    },
+
+    // 验证失败事务处理
+    failure: function (e) {
+        console.log(e);
+        kg.html( kg.$( "#captchaButton2" ), "验证失败，点击重新验证" );
+    },
+
+    // 点击刷新按钮时触发
+    refresh: function (e) {
+        console.log(e);
+    }
+});
+</script>
+</head>
+<body>
+    <div class="nav_box">
+        <select onchange="location.href=this.options[this.selectedIndex].value;">
+            <option value="normal.html">嵌入式</option>
+            <option value="extend-top.html" >向上触发</option>
+            <option value="extend-down.html" >向下触发</option>
+            <option value="popup-a.html" >弹出式 A</option>
+            <option selected="selected" value="popup-b.html" >弹出式 B</option>
+        </select>
+     </div>
+
+    <form name="form1" action="demo.php?cty=3" method="post" id="form">
+        <!-- 将验证成功后的 token 通过隐藏域传递到后端 -->
+        <input type="hidden" name="kgCaptchaToken" id="kgCaptchaToken" value="">
+        <div class="inputForm">
+            <input type="text" readonly placeholder=" 例：填写登录帐号" />
+            <br/>
+            <input type="password" readonly placeholder=" 例：填写登录密码" />
+        </div>
+        <a class="btn" id="captchaButton2">提  交</a>
+    </form>
+</body>
+</html>
